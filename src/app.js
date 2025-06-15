@@ -16,11 +16,14 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
+
 // Router imports
 import userRoute from "./routes/user.route.js";
 import posterRoute from "./routes/poster.route.js"
 import categoryRoute from "./routes/category.route.js"
 import orderRoute from "./routes/order.route.js"
+import reviewRoute from "./routes/review.route.js"
+import paymentRoute from "./routes/payment.route.js"
 
 // route declaration:
 
@@ -35,6 +38,12 @@ app.use("/api/v1/category",categoryRoute);
 
 //order
 app.use("/api/v1/orders",orderRoute)
+
+//review
+app.use("/api/v1/reviews",reviewRoute);
+
+//payment
+app.use("/api/v1/payment",paymentRoute);
 
 
 export {app};

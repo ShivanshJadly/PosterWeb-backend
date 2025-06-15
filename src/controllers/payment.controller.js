@@ -1,5 +1,5 @@
-import { razorpay } from "../config/razorpay.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import { razorpay } from "../utils/razorpay.js";
+import {asyncHandler} from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Transaction } from "../models/transaction.model.js";
