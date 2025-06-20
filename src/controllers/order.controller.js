@@ -17,6 +17,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     const product = await Poster.findById(item.productId);
     if (!product) throw new ApiError(404, `Poster not found: ${item.productId}`);
     totalPrice += product.price * item.quantity;
+    size = item.size;
   }
 
   const newOrder = await Orders.create({
@@ -24,7 +25,8 @@ export const createOrder = asyncHandler(async (req, res) => {
     orderItems,
     shippingAddress,
     paymetMethod,
-    totalPrice
+    totalPrice,
+    size
   });
 
   return res.status(201).json(
@@ -36,7 +38,8 @@ export const createOrder = asyncHandler(async (req, res) => {
 export const getAllOrders = asyncHandler(async (req, res) => {
   const orders = await Orders.find()
     .populate("customer", "fullName email")
-    .populate("orderItems.productId", "title price");
+    .populate("orderItems.productId", "title price")
+    .populate("orderItems.size")
 
   return res.status(200).json(
     new ApiResponse(200, orders, "All orders fetched")
@@ -46,7 +49,8 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 // Get Orders for Logged-in User
 export const getMyOrders = asyncHandler(async (req, res) => {
   const myOrders = await Orders.find({ customer: req.user._id })
-    .populate("orderItems.productId", "title price");
+    .populate("orderItems.productId", "title price")
+    .populate("orderItems.size")
 
   return res.status(200).json(
     new ApiResponse(200, myOrders, "User orders fetched")
