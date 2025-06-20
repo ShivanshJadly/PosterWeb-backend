@@ -13,7 +13,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   }
 
   const options = {
-    amount: amount * 100, // Razorpay accepts amount in paise
+    amount: amount * 100,
     currency,
     receipt: `receipt_order_${Date.now()}`,
     payment_capture: 1,

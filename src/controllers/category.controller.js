@@ -2,6 +2,7 @@ import { Category } from "../models/category.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js"
 
 // function getRandomInt(max) {
 //   return Math.floor(Math.random() * max)
