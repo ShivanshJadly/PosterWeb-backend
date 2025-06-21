@@ -24,6 +24,7 @@ import categoryRoute from "./routes/category.route.js"
 import orderRoute from "./routes/order.route.js"
 import reviewRoute from "./routes/review.route.js"
 import paymentRoute from "./routes/payment.route.js"
+import cartRoute from "./routes/cart.route.js"
 
 // route declaration:
 
@@ -44,6 +45,9 @@ app.use("/api/v1/reviews",reviewRoute);
 
 //payment
 app.use("/api/v1/payment",paymentRoute);
+
+//cart
+app.use("/api/v1/cart",cartRoute);
 
 
 export {app};

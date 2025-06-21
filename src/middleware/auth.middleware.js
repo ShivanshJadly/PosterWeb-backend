@@ -6,7 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const verifyJwt = asyncHandler( async (req, _ , next) => {
    const token = req.cookies?.accessToken ||
-                 req.body.accessToken ||
+                 req.body?.accessToken ||
                  req.header("Authorization").replace("Bearer ", "");
 
     if (!token) {
