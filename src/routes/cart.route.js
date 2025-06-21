@@ -1,7 +1,7 @@
 // cart.routes.js (example)
 import {Router} from "express";
 import { addToCart, getCartItems, updateCartItem, removeCartItem, clearCart } from "../controllers/cart.controller.js";
-import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { verifyJwt } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
