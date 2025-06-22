@@ -2,8 +2,8 @@ import { razorpay } from "../utils/razorpay.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
-import { Transaction } from "../models/transaction.model.js";
 import crypto from "crypto";
+import { Orders } from "../models/order.model.js";
 
 export const createOrder = asyncHandler(async (req, res) => {
   const { amount, currency = "INR" } = req.body;
@@ -27,7 +27,15 @@ export const createOrder = asyncHandler(async (req, res) => {
 });
 
 export const verifyPayment = asyncHandler(async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    amount,
+    orderItems,
+    shippingAddress,
+    paymetMethod,
+  } = req.body;
 
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
@@ -39,17 +47,21 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid signature, payment verification failed");
   }
 
-  await Transaction.create({
-    user: req.user._id,
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-    amount,
-    status: "success"
+  const newOrder = await Orders.create({
+    customer: req.user._id,
+    orderItems: orderItems.map((item) => ({
+      productId: item.posterId,
+      quantity: item.quantity,
+      posterSize: item.size,
+    })),
+    shippingAddress,
+    paymetMethod: paymetMethod || "Online",
+    paymetStatus: "PAID",
+    totalPrice: amount,
   });
 
   return res.status(200).json(
-    new ApiResponse(200, { razorpay_order_id, razorpay_payment_id }, "Payment verified")
+    new ApiResponse(200, { razorpay_order_id, razorpay_payment_id, newOrder }, "Payment verified")
   );
 });
 
