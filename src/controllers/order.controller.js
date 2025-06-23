@@ -18,7 +18,7 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 // Get Orders for Logged-in User
 export const getMyOrders = asyncHandler(async (req, res) => {
   const myOrders = await Orders.find({ customer: req.user._id })
-    .populate("orderItems.productId", "title price")
+    .populate("orderItems.productId", "title price posterImage")
     .populate("orderItems.posterSize")
 
   return res.status(200).json(

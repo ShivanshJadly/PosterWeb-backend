@@ -3,11 +3,11 @@ import { Review } from "../models/review.model.js";
 import { Poster } from "../models/poster.model.js";
 import {ApiError} from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
+import { Orders } from "../models/order.model.js";
 
 const addReview = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const { posterId } = req.params;
-  const { rating, comments } = req.body;
+  const { rating, comments, posterId } = req.body;  
 
   if (!rating || !posterId) {
     throw new ApiError(400, "Rating and posterId are required");
