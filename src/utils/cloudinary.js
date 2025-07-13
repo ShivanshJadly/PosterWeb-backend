@@ -1,4 +1,4 @@
-import {v2 as cloudinary} from "cloudinary"
+import { v2 as cloudinary } from "cloudinary"
 import { CLOUDINARY_FOLDER } from "../constant.js";
 import fs from "fs"
 
@@ -8,16 +8,25 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-const uploadToCloudinary = async(localFilePath)=>{
+const uploadToCloudinary = async (localFilePath) => {
     try {
-        if(!localFilePath) return null;
+        if (!localFilePath) return null;
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto",
-            folder: CLOUDINARY_FOLDER
+            folder: CLOUDINARY_FOLDER,
+            transformation: [{
+                quality: "auto",
+                fetch_format: "auto",
+                width: 800,
+                height: 800,
+                crop: "limit",
+                effect: "sharpen"
+            }]
+
         });
-    
+
         fs.unlinkSync(localFilePath);
-    
+
         return response;
     } catch (error) {
         fs.unlinkSync(localFilePath)
@@ -25,16 +34,16 @@ const uploadToCloudinary = async(localFilePath)=>{
     }
 }
 
-const oldImageToBeDeleted = async (public_id) =>{
+const oldImageToBeDeleted = async (public_id) => {
 
     try {
         const deleteResponse = await cloudinary.uploader.destroy(public_id)
-    
+
         return deleteResponse;
     } catch (error) {
-        console.log("Error: ",error);
+        console.log("Error: ", error);
     }
 
 }
 
-export {uploadToCloudinary, oldImageToBeDeleted};
+export { uploadToCloudinary, oldImageToBeDeleted };
