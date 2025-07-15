@@ -63,17 +63,25 @@ const updateCartItem = asyncHandler(async (req, res) => {
 });
 
 const removeCartItem = asyncHandler(async (req, res) => {
-    const userId = req.user._id;
-    const { cartItemId } = req.params;
+  const userId = req.user._id;
+  const { cartItemId } = req.params;
 
-    const cartItem = await Cart.findOneAndDelete({ _id: cartItemId, user: userId });
+  const cartItem = await Cart.findOne({ _id: cartItemId, user: userId });
 
-    if (!cartItem) {
-        throw new ApiError(404, "Cart item not found");
-    }
+  if (!cartItem) {
+    throw new ApiError(404, "Cart item not found");
+  }
 
-    res.status(200).json(new ApiResponse(200, cartItem, "Cart item removed"));
+  if (cartItem.quantity > 1) {
+    cartItem.quantity -= 1;
+    await cartItem.save();
+    return res.status(200).json(new ApiResponse(200, cartItem, "Reduced item quantity by 1"));
+  } else {
+    await Cart.deleteOne({ _id: cartItemId, user: userId });
+    return res.status(200).json(new ApiResponse(200, cartItem, "Cart item removed"));
+  }
 });
+
 
 const clearCart = asyncHandler(async (req, res) => {
     const userId = req.user._id;
