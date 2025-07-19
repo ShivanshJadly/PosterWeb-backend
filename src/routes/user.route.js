@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { addToWishlist, addUserAddress, getUserAddress, getUserInfo, getWishlist, login, logoutUser, removeFromWishlist, signup } from "../controllers/user.controller.js";
+import { addToWishlist, addUserAddress, getUserAddress, getWishlist, login, logoutUser, removeFromWishlist, signup } from "../controllers/user.controller.js";
 import {verifyJwt} from "../middleware/auth.middleware.js"
 
 const router = Router();
 
 router.route("/signup").post(signup);
 router.route("/login").post(login);
-router.route("/").get(verifyJwt,getUserInfo);
 
 //secure routes
 router.route("/logout").post(verifyJwt ,logoutUser);
