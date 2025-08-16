@@ -8,6 +8,9 @@ dotenv.config({
 
 connectDB()
 .then(()=>{
+        app.get("/", (req, res) => {
+            res.send("🚀 Server is up and running!");
+        });
         app.listen(process.env.PORT, ()=>{
             console.log(`App listening on port ${process.env.PORT}.`)
         })
